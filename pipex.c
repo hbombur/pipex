@@ -6,7 +6,7 @@
 /*   By: hbombur <hbombur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 13:43:59 by hbombur           #+#    #+#             */
-/*   Updated: 2022/03/09 14:51:49 by hbombur          ###   ########.fr       */
+/*   Updated: 2022/03/09 15:55:40 by hbombur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	p_error(char *str)
 	perror(str);
 	exit(EXIT_FAILURE);
 }
-
+ 
 static void	pipe_parent(int *fd, char **argv, char **envp)
 {
 
@@ -37,7 +37,8 @@ static void	pipe_child(int *fd, char **argv, char **envp)
 		p_error("dup2 file 1");
 	close(fd[0]);
 	cmd = ft_split_cmd(argv[2], ' ');
-	
+	if (execve(check_path(cmd[0], envp), cmd, envp) == -1) //check_path rework
+		error("cmd2 not found");
 }
 
 int	main(int argc, char **argv, char **envp)

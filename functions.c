@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hbombur <hbombur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/09 13:45:05 by hbombur           #+#    #+#             */
-/*   Updated: 2022/03/09 14:51:05 by hbombur          ###   ########.fr       */
+/*   Created: 2022/03/09 12:43:55 by hbombur           #+#    #+#             */
+/*   Updated: 2022/03/09 13:45:16 by hbombur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "pipex.h"
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <errno.h>
-# include <stdio.h>
-# include <fcntl.h>
-# include <sys/types.h>
-# include <sys/wait.h>
+void	ft_putstr_fd(char *str, int fd)
+{
+	size_t	i;
 
-void	p_error(char *str);
-void	ft_putstr_fd(char *str, int fd);
-char	**ft_split_cmd(char const *argv, char c);
-
-#endif
+	i = 0;
+	if (str)
+	{
+		while (str[i] != '\0')
+		{
+			write(fd, &str[i], 1);
+			i++;
+		}
+	}
+}

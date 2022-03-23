@@ -9,9 +9,11 @@ HEADER = pipex.h
 
 FLAGS	= -Wall -Wextra -Werror -I
 
+.PHONY : all clean fclean re
+
 all : $(NAME)
 
-$(NAME) : $(OBJ)
+$(NAME) : $(OBJ) $(HEADER)
 	ar rcs $(NAME) $?
 
 %.o : %.c $(HEADER)
@@ -24,5 +26,3 @@ fclean : clean
 	@rm -f $(NAME)
 
 re : fclean all
-
-.PHONY : all clean fclean re

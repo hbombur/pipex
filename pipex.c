@@ -3,73 +3,84 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbombur <hbombur@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: hbombur <hbombur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/09 13:43:59 by hbombur           #+#    #+#             */
-/*   Updated: 2022/03/22 16:43:48 by hbombur          ###   ########.fr       */
+/*   Created: 2022/03/21 14:32:24 by hbombur           #+#    #+#             */
+/*   Updated: 2022/03/24 14:40:30 by hbombur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	p_error(char *str)
+char	*get_path(char **tmp, char *cmd)
 {
-	perror(str);
-	exit(EXIT_FAILURE);
-}
- 
-static void	pipe_parent(int *fd, char **argv, char **envp)
-{
-	int		file;
-	char	*cmd;
+	char	*freetmp;
+	int		i;
+	char	*path;
 
-	file = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (file == -1)
-		p_error("Err: Open file2");
-	if ((dup2(fd[0], STDIN_FILENO)) == -1)
-		p_error("Err: Dup2 fd[0]");
-	if ((dup2(file, STDOUT_FILENO)) == -1)
-		p_error("Err:Dup2 file2");
-	close(fd[1]);
-	cmd = ft_split_cmd(argv[3], ' ');
+	i = 0;
+	while (tmp[i])
+	{
+		path = ft_strjoin(tmp[i], "/");
+		freetmp = path;
+		path = ft_strjoin(path, cmd);
+		free(freetmp);
+		if (!(access(path, F_OK)))
+			return (path);
+		free(path);
+		i++;
+	}
+	return (NULL);
 }
 
-static void	pipe_child(int *fd, char **argv, char **envp)
+char	**get_cmd(char **argv, int i)
 {
-	int		file;
 	char	**cmd;
 
-	file = open(argv[1], O_RDONLY);
-	if (file == -1)
-		p_error("Err: Open file1");
-	if (dup2(fd[1], STDOUT_FILENO) == -1)
-		p_error("Err: Dup2 fd[1]");
-	if (dup2(file, STDIN_FILENO) == -1)
-		p_error("Err: Dup2 file1");
-	close(fd[0]);
-	cmd = ft_split_cmd(argv[2], ' ');
-	if (execve(check_path(cmd[0], envp), cmd, envp) == -1) //check_path rework
-		error("Err: Cmd2 not found");
+	cmd = ft_split(argv[i], ' ');
+	return (cmd);
+}
+
+char	*find_path(char **envp, char **argv, int index)
+{
+	char	**tmp;
+	char	*path;
+	int		i;
+	char	**cmd;
+
+	i = 0;
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+			tmp = ft_split(envp[i] + 5, ':');
+		i++;
+	}
+	cmd = get_cmd(argv, index);
+	path = get_path(tmp, cmd[0]);
+	ft_free(tmp);
+	if (path == NULL)
+		p_error_n(141, index, argv, cmd[0]);
+	return (path);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	int	fd[2];
 	int	pid;
+	int	pfd[2];
 
-	if (argc != 5)
-		(ft_putstr_fd("Error!: Use format ./pipex file1 cmd1 cmd2 file2", 2));
-	else
+	if (argc == 5)
 	{
-		if (pipe(fd) == -1)
-			p_error("Err: Pipe");
-		pid = fork();
-		if (pid == -1)
-			p_error("Err: Fork");
-		if (pid == 0)
-			pipe_child(fd, argv, envp);
-		wait(NULL);
-		pipe_parent(fd, argv, envp);
+		p_error_pipe(pfd);
+		fd[0] = open(argv[1], O_RDONLY);
+		fd[1] = open(argv[4], O_WRONLY | O_TRUNC | O_CREAT, 0644);
+		pid = p_error_fork();
+		if (pid)
+			pr_parent(fd, pfd, envp, argv);
+		else
+			pr_child(fd, pfd, envp, argv);
 	}
+	else
+		write(1, "Err: use format ./pipex file1 cmd1 cmd2 file2", 45);
 	return (0);
 }

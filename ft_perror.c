@@ -6,7 +6,7 @@
 /*   By: hbombur <hbombur@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:44:36 by hbombur           #+#    #+#             */
-/*   Updated: 2022/03/23 22:16:51 by hbombur          ###   ########.fr       */
+/*   Updated: 2022/03/25 12:41:35 by hbombur          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,11 @@ void	p_error(char *str)
 	exit(EXIT_FAILURE);
 }
 
-void	p_error_n(int	code, int index, char **argv, char *cmd)
+void	p_error_n(int code, int index, char **argv, char *cmd)
 {
-	
 	if (code == 2)
 	{
 		ft_putstr_fd("No such file or directory: ", 2);
-		
 		ft_putstr_fd(cmd, 2);
 		ft_putstr_fd("\n", 2);
 		exit(code);
@@ -36,7 +34,6 @@ void	p_error_n(int	code, int index, char **argv, char *cmd)
 		ft_putstr_fd("\n", 2);
 		exit(code);
 	}
-	
 	strerror(code);
 	exit(EXIT_FAILURE);
 }

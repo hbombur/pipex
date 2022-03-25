@@ -12,7 +12,18 @@
 
 #include "pipex.h"
 
-static size_t	ft_word_count(char *str, char c)
+char	**ft_free(char **arr)
+{
+	size_t	n;
+
+	n = 0;
+	while (arr[n] != NULL)
+		free(arr[n++]);
+	free(arr);
+	return (NULL);
+}
+
+size_t	ft_word_count(char *str, char c)
 {
 	size_t	i;
 	size_t	count;
@@ -40,7 +51,7 @@ static size_t	ft_word_count(char *str, char c)
 	return (count);
 }
 
-static size_t	ft_pointer(char *str, char c)
+size_t	ft_pointer(char *str, char c)
 {
 	size_t	j;
 
@@ -50,18 +61,7 @@ static size_t	ft_pointer(char *str, char c)
 	return (j);
 }
 
-char	**ft_free(char **arr)
-{
-	size_t	n;
-
-	n = 0;
-	while (arr[n] != NULL)
-		free(arr[n++]);
-	free(arr);
-	return (NULL);
-}
-
-static char	**ft_make_arr(size_t j, char *str, char c, char **arr)
+char	**ft_make_arr(size_t j, char *str, char c, char **arr)
 {
 	size_t	n;
 	size_t	len;

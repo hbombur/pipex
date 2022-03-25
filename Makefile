@@ -1,23 +1,46 @@
 NAME = pipex
 
-SRC =	pipex.c ft_split.c ft_perror.c \
-		functions.c processes.c
-
-
-OBJ = $(patsubst %.c, %.o, $(SRC))
+FLAGS	= -Wall -Wextra -Werror
 
 HEADER = pipex.h
 
-FLAGS	= -Wall -Wextra -Werror -I
+SRC =	ft_perror.c \
+		ft_split.c \
+		functions.c  \
+		processes.c \
+		pipex.c   \
+		
+OBJ = $(patsubst %.c, %.o, $(SRC))
 
+# .PHONY: all re clean fclean
+# #
+# %.o: %.c $(HEADER)
+# 	$(CC) $(FLAGS) -c $<
+# #
+# all: $(NAME)
+# 	@echo "\033[32m\033[40m\033[1m[Pipex Compiled]"
+# #
+# $(NAME): $(OBJ)
+# 	$(CC) $(FLAGS) $(OBJ) -o $@
+# #
+# clean:
+# 	${RM} $(OBJ)
+# #
+# fclean: clean
+# 	${RM} $(NAME)
+# #
+# re: fclean all
 
-all : $(NAME)
-
-$(NAME) : $(OBJ)
-	$(CC) $(FLAGS) $(OBJ) $(HEADER)
+.PHONY : all clean fclean re
 
 %.o : %.c $(HEADER)
-	$(CC) $(FLAGS) $(HEADER) -c $< -o $@
+	$(CC) $(FLAGS) -c $< -o $@
+
+all : $(NAME)
+	@echo "\033[32m\033[40m\033[1m[Pipex Compiled]"
+
+$(NAME) : $(OBJ) $(HEADER)
+	$(CC) $(FLAGS) $(OBJ) -o $@
 	
 clean :
 	@rm -f $(OBJ)
@@ -26,5 +49,3 @@ fclean : clean
 	@rm -f $(NAME)
 
 re : fclean all
-
-.PHONY : all clean fclean re

@@ -23,7 +23,7 @@ char	**ft_free(char **arr)
 	return (NULL);
 }
 
-size_t	ft_word_count(char *str, char c)
+static size_t	ft_word_count(char *str, char c)
 {
 	size_t	i;
 	size_t	count;
@@ -51,7 +51,7 @@ size_t	ft_word_count(char *str, char c)
 	return (count);
 }
 
-size_t	ft_pointer(char *str, char c)
+static size_t	ft_pointer(char *str, char c)
 {
 	size_t	j;
 
@@ -61,7 +61,7 @@ size_t	ft_pointer(char *str, char c)
 	return (j);
 }
 
-char	**ft_make_arr(size_t j, char *str, char c, char **arr)
+static char	**ft_make_arr(size_t j, char *str, char c, char **arr)
 {
 	size_t	n;
 	size_t	len;

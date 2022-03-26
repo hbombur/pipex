@@ -12,25 +12,6 @@ SRC =	ft_perror.c \
 		
 OBJ = $(patsubst %.c, %.o, $(SRC))
 
-# .PHONY: all re clean fclean
-# #
-# %.o: %.c $(HEADER)
-# 	$(CC) $(FLAGS) -c $<
-# #
-# all: $(NAME)
-# 	@echo "\033[32m\033[40m\033[1m[Pipex Compiled]"
-# #
-# $(NAME): $(OBJ)
-# 	$(CC) $(FLAGS) $(OBJ) -o $@
-# #
-# clean:
-# 	${RM} $(OBJ)
-# #
-# fclean: clean
-# 	${RM} $(NAME)
-# #
-# re: fclean all
-
 .PHONY : all clean fclean re
 
 %.o : %.c $(HEADER)
